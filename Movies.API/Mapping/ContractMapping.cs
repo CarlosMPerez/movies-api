@@ -16,11 +16,11 @@ public static class ContractMapping
             Genres = request.Genres.ToList()
         };
     }
-    public static Movie ToModel(this UpdateMovieRequest request)
+    public static Movie ToModel(this UpdateMovieRequest request, Guid id)
     {
         return new Movie
         {
-            Id = request.Id,
+            Id = id,
             Title = request.Title,
             ReleaseYear = request.ReleaseYear,
             Genres = request.Genres.ToList()
