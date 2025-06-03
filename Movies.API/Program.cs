@@ -1,7 +1,8 @@
 using Movies.Application.Core;
+using Movies.Application.Database;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var config = builder.Configuration;
 // SERVICES REGISTRATION
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -22,6 +23,9 @@ builder.Services.AddOpenApi();
 // This setup also improves testability, maintainability, and scalability by decoupling infrastructure concerns 
 // from core business logic. Each layer is responsible for registering only its own dependencies.
 builder.Services.AddApplicationLayer();
+var connectionString = config["Database:ConnectionString"]
+    ?? throw new InvalidOperationException("Connection string 'Database:ConnectionString' is missing.");
+builder.Services.AddDatabase(connectionString);
 builder.Services.AddControllers();
 
 // From this point forward, builder.Services is read-only.
@@ -35,5 +39,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
+
+var dbInitializer = app.Services.GetRequiredService<DbInitializer>();
+await dbInitializer.InitializeDatabaseAsync();
 
 app.Run();

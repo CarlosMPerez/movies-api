@@ -11,6 +11,7 @@ public static class ResponseMapping
         {
             Id = movie.Id,
             Title = movie.Title,
+            Slug = movie.Slug,
             ReleaseYear = movie.ReleaseYear,
             Genres = movie.Genres.ToList()
         };

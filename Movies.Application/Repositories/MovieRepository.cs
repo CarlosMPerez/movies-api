@@ -27,6 +27,11 @@ public class MovieRepository : IMovieRepository
         return Task.FromResult(_movies.SingleOrDefault(x => x.Id == id));
     }
 
+    public Task<Movie?> GetBySlugAsync(string slug)
+    {
+        return Task.FromResult(_movies.SingleOrDefault(x => x.Slug == slug));
+    }
+
     public Task<bool> UpdateAsync(Movie movie)
     {
         var ndx = _movies.FindIndex(x => x.Id == movie.Id);

@@ -14,13 +14,15 @@ public class MoviesController(IMovieRepository movieRepo) : ControllerBase
     {
         var movie = request.ToModel();
         await movieRepo.CreateAsync(movie);
-        return CreatedAtAction(nameof(Get), new { id = movie.Id }, movie.ToResponse());
+        return CreatedAtAction(nameof(Get), new { idOrSlug = movie.Id }, movie.ToResponse());
     }
 
     [HttpGet(ApiEndpoints.Movies.Get)]
-    public async Task<IActionResult> Get([FromRoute] Guid id)
+    public async Task<IActionResult> Get([FromRoute] string idOrSlug)
     {
-        var movie = await movieRepo.GetByIdAsync(id);
+        var movie = Guid.TryParse(idOrSlug, out var id) ?
+                await movieRepo.GetByIdAsync(id) :
+                await movieRepo.GetBySlugAsync(idOrSlug);
         if (movie is null) return NotFound();
 
         return Ok(movie.ToResponse());
