@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Movies.Application.Database;
 using Movies.Application.Repositories;
+using Movies.Application.Services;
 
 namespace Movies.Application.Core;
 
@@ -24,6 +25,7 @@ public static class ApplicationServiceCollectionExtensions
         // Singleton means a single instance is created and shared throughout the application's lifetime.
         // This is appropriate if the repository is stateless or manages its own internal state safely.
         services.AddSingleton<IMovieRepository, MovieRepository>();
+        services.AddSingleton<IMovieService, MovieService>();
 
         // Return the service collection to allow for method chaining.
         return services;
