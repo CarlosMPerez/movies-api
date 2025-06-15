@@ -1,7 +1,9 @@
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Movies.Application.Database;
 using Movies.Application.Repositories;
 using Movies.Application.Services;
+using Movies.Application.Validators;
 
 namespace Movies.Application.Core;
 
@@ -26,6 +28,11 @@ public static class ApplicationServiceCollectionExtensions
         // This is appropriate if the repository is stateless or manages its own internal state safely.
         services.AddSingleton<IMovieRepository, MovieRepository>();
         services.AddSingleton<IMovieService, MovieService>();
+
+        // Register the validation service as a singleton
+        // We could use any part of the assembly but we create a marker interface
+        // kind of like a bookmark just for this
+        services.AddValidatorsFromAssemblyContaining<IApplicationMarker>(ServiceLifetime.Singleton);
 
         // Return the service collection to allow for method chaining.
         return services;
