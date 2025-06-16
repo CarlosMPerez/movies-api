@@ -37,6 +37,7 @@ public class MovieValidator : AbstractValidator<Movie>
                                             CancellationToken token)
     {
         var existingMovie = await _movieRepo.GetBySlugAsync(slug, token);
+
         // if the slug exists and they have the same id it's an update so it's fine
         if (existingMovie is not null)
             return existingMovie.Id == movie.Id;
